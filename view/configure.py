@@ -59,3 +59,19 @@ class LabelFrame(tk.LabelFrame):
         if "bg" not in kwargs:
             kwargs["bg"] = "#E2EAFC"
         super(LabelFrame, self).__init__(master, kwargs)
+
+
+class Scale(tk.Scale):
+    def __init__(self, master=None, **kwargs):
+        if "orient" not in kwargs:
+            kwargs["orient"] = tk.HORIZONTAL
+        if "bg" not in kwargs:
+            kwargs["bg"] = "#D2DFFD"
+        if "highlightbackground" not in kwargs:
+            kwargs["highlightbackground"] = "#E3CF57"
+        if "troughcolor" not in kwargs:
+            kwargs["troughcolor"] = "#F5F5DC"
+        if "activebackground" not in kwargs:
+            kwargs["activebackground"] = "#9B9B29"
+        super(Scale, self).__init__(master, kwargs)
+
