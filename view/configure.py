@@ -1,6 +1,13 @@
 import tkinter as tk
 
 
+class TopLevel(tk.Toplevel):
+    def __init__(self, master=None, **kwargs):
+        if "bg" not in kwargs:
+            kwargs["bg"] = "#E2EAFC"
+        super(TopLevel, self).__init__(master, **kwargs)
+
+
 class Button(tk.Button):
     def __init__(self, master=None, **kwargs):
         if "bg" not in kwargs:

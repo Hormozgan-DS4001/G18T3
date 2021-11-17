@@ -1,4 +1,5 @@
 from configure import Frame, Button, LabelFrame, Label, Tk, Entry
+from add_file_view import AddFile
 from tkinter import ttk
 import tkinter
 
@@ -39,4 +40,6 @@ class FileManagerPanel(Tk):
 
     def prev_page(self):
         pass
-    
+
+
+
