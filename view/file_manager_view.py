@@ -34,11 +34,10 @@ class FileManagerPanel(Tk):
         address = AddFile(self, "File Address: ", "Upload File").get_result()
         size = AddFile(self, "File Size: ", "Upload File").get_result()
         self.callback_upload(name, address, size)
-        Label(self.frm, text=f"Upload File - Name:{name} Size:{size} Address:{address}").after(10000)
+        Label(self.frm, text=f"Upload File - Name:{name} Size:{size} Address:{address}").pack(side="top").after(10000)
         for node in self.callback_delete():
-            if node is None:
-                break
-            Label(self.frm, text=f"Remove File - Name:{node.name} Size:{node.size} Address:{node.address}").after(10000)
+            Label(self.frm, text=f"Remove File - Name:{node.name} Size:{node.size} Address:{node.address}")\
+                .pack(side="top").after(10000)
 
     def change_memory(self):
         pass
