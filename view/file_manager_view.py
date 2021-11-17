@@ -15,7 +15,10 @@ class FileManagerPanel(Tk):
         self.callback_memory = callback_memory
         self.callback_delete = callback_delete
         self.callback_upload = callback_upload
+
         frm_console = Frame(self)
+        frm_console.grid(row=0, column=0)
+        frm_console = Frame(frm_console)
         frm_console.grid(row=0, column=0)
         my_canvas = tkinter.Canvas(self)
         my_canvas.pack(side="left", fill="both", expand=1)
@@ -25,6 +28,11 @@ class FileManagerPanel(Tk):
         my_canvas.bind("<configure>", lambda e: my_canvas.config(scrollregion=my_canvas.bbox("all")))
         self.frm = Frame(my_canvas)
         my_canvas.create_window((0, 0), window=self.frm, anchor="nw")
+
+        frm_btn = Frame(self)
+        frm_btn.grid(row=1, column=0)
+        Button(frm_btn, text="Upload", command=self.add_file()).grid(row=0, column=0)
+        Button(frm_btn, text="Change Memory", command=self.change_memory()).grid(row=0, column=1)
 
     def update_memory(self, text):
         pass
