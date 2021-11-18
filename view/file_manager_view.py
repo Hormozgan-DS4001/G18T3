@@ -1,17 +1,17 @@
-from configure import Frame, Button, LabelFrame, Label, Tk, Entry
+from configure import Frame, Button, LabelFrame, Label, Tk, Entry, Scale
 from add_file_view import AddFile
 from tkinter import ttk
 import tkinter
 
 
 class FileManagerPanel(Tk):
-    def __init__(self, callback_new, callback_old, callback_more, callback_less, callback_memory,
+    def __init__(self, callback_new, callback_old, callback_largest, callback_smallest, callback_memory,
                  callback_delete, callback_upload):
         super(FileManagerPanel, self).__init__()
         self.callback_new = callback_new
         self.callback_old = callback_old
-        self.callback_more = callback_more
-        self.callback_less = callback_less
+        self.callback_largest = callback_largest
+        self.callback_smallest = callback_smallest
         self.callback_memory = callback_memory
         self.callback_delete = callback_delete
         self.callback_upload = callback_upload
@@ -34,8 +34,49 @@ class FileManagerPanel(Tk):
         Button(frm_btn, text="Upload", command=self.add_file()).grid(row=0, column=0)
         Button(frm_btn, text="Change Memory", command=self.change_memory()).grid(row=0, column=1)
 
-    def update_memory(self, text):
-        pass
+        self.frm_mem = Frame(self)
+        self.scale = Scale(self.frm_mem, width=18, length=122, from_=1, to=2048, orient="horizontal")
+        self.scale.grid(row=0, column=0)
+        Button(self.frm_mem, text="Ok", command=self.update_memory).grid(row=1, column=0)
+
+        frm_tree = Frame(self)
+        frm_tree.grid(row=3, column=0)
+        self.result_sort = self.callback_new
+        self.option_var = tkinter.StringVar()
+        self.option_var.set("Newest to Oldest")
+        tkinter.OptionMenu(frm_tree, self.option_var, ["Newest to Oldest", "Oldest to Newest", "Largest to Smallest",
+                                                  "Smallest to Largest"], command=self.result_om).grid(row=1, column=0,
+                                                                                                       sticky="w")
+
+        self.tree = ttk.Treeview(frm_tree, show="headings", selectmode="brows", height=10)
+        self.tree["columns"] = ("name", "address", "size")
+        self.tree.heading("name", text="Name")
+        self.tree.heading("address", text="Address")
+        self.tree.heading("size", text="Size")
+        self.tree.grid(row=1, column=0)
+
+    def result_om(self):
+        res = self.option_var.get()
+        if res == "Newest to Oldest":
+            self.result_sort = self.callback_new
+        elif res == "Oldest to Newest":
+            self.result_sort = self.callback_old
+        elif res == "Largest to Smallest":
+            self.result_sort = self.callback_largest
+        else:
+            self.result_sort = self.callback_smallest
+        self.next_page()
+
+    def change_memory(self):
+        self.frm_mem.grid(row=2, column=0)
+
+    def update_memory(self):
+        strong = self.scale.get()
+        self.callback_memory(int(strong))
+        for node in self.callback_delete():
+            Label(self.frm, text=f"Remove File - Name:{node.name} Size:{node.size} Address:{node.address}") \
+                .pack(side="top").after(10000)
+        self.frm_mem.grid_forget()
 
     def add_file(self):
         name = AddFile(self, "File Name: ", "Upload File").get_result()
@@ -44,17 +85,11 @@ class FileManagerPanel(Tk):
         self.callback_upload(name, address, size)
         Label(self.frm, text=f"Upload File - Name:{name} Size:{size} Address:{address}").pack(side="top").after(10000)
         for node in self.callback_delete():
-            Label(self.frm, text=f"Remove File - Name:{node.name} Size:{node.size} Address:{node.address}")\
+            Label(self.frm, text=f"Remove File - Name:{node.name} Size:{node.size} Address:{node.address}") \
                 .pack(side="top").after(10000)
-
-    def change_memory(self):
-        pass
 
     def next_page(self):
         pass
 
     def prev_page(self):
         pass
-
-
-
