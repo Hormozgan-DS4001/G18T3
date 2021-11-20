@@ -11,6 +11,7 @@ class File:
 class BinarySearchTree:
     def __init__(self):
         self.root = None
+        self.head = None
 
     def rsearch(self, troot, key):
         if troot:
@@ -39,10 +40,14 @@ class BinarySearchTree:
         if self.root:
             if s < temp.size:
                 temp.left = f
+                temp.prev = f
             else:
                 temp.right = f
+                temp.next = f
         else:
             self.root = f
+            self.head = f
+
 
     def delete(self,e):
         p = self.root
@@ -77,6 +82,15 @@ class BinarySearchTree:
             else:
                 pp.right = c
 
+    def printlist(self):
+
+        temp = self.head
+        while temp.left:
+            temp = temp.left
+
+        while temp.next is not None:
+            print(temp.size)
+            temp = temp.next
 
     def inorder(self, troot):
         if troot:
@@ -93,3 +107,5 @@ tree.insert('efwsf', 'htrhr', 451)
 tree.insert('fsfs', 'nfg', 6)
 
 tree.inorder(tree.root)
+print('')
+tree.printlist()
