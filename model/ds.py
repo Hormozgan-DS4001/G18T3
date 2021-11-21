@@ -1,8 +1,6 @@
-class File:
-    def __init__(self, name: str, address: str, size: int,  left=None, right=None, next = None, prev = None):
-        self.name = name
-        self.address = address
-        self.size = size
+class Node:
+    def __init__(self, data = None,  left=None, right=None, next = None, prev = None):
+        self.data = data
         self.left = left
         self.right = right
         self.next = next
@@ -13,32 +11,33 @@ class BinarySearchTree:
         self.root = None
         self.head = None
 
+
     def rsearch(self, troot, key):
         if troot:
-            if key == troot.size:
+            if key == troot.data:
                 return True
-            elif key < troot.size:
+            elif key < troot.data:
                 return self.rsearch(troot.left,key)
-            elif key > troot.size:
+            elif key > troot.data:
                 return self.rsearch(troot.right,key)
         else:
             return False
 
-    def insert(self, n, add, s):
+    def insert(self, s):
         temp = None
         troot = self.root
         while troot:
             temp = troot
-            if s == troot.size:
+            if s == troot.data:
                 return
-            elif s < troot.size:
+            elif s < troot.data:
                 troot = troot.left
-            elif s > troot.size:
+            elif s > troot.data:
                 troot = troot.right
 
-        f = File(n, add, s)
+        f = Node(s)
         if self.root:
-            if s < temp.size:
+            if s < temp.data:
                 temp.left = f
                 temp.prev = f
             else:
@@ -52,9 +51,9 @@ class BinarySearchTree:
     def delete(self,e):
         p = self.root
         pp = None
-        while p and p.size != e:
+        while p and p.data != e:
             pp = p
-            if e < p.size:
+            if e < p.data:
                 p = p.left
             else:
                 p = p.right
@@ -66,7 +65,7 @@ class BinarySearchTree:
             while s.right:
                 ps = s
                 s = s.right
-            p.size = s.size
+            p.data = s.data
             p = s
             pp = ps
         c = None
@@ -82,14 +81,15 @@ class BinarySearchTree:
             else:
                 pp.right = c
 
+#naghes
     def printlist(self):
 
         temp = self.head
         while temp.left:
             temp = temp.left
 
-        while temp.next is not None:
-            print(temp.size)
+        while temp.next is None:
+            print(temp.data)
             temp = temp.next
 
 # in-order traverse - sort from the smallest to the largest one
@@ -98,7 +98,7 @@ class BinarySearchTree:
 
         while current is not None:
             if current.left is None:
-                yield current.size
+                yield current.data
                 current = current.right
             else:
                 pre = current.left
@@ -111,18 +111,18 @@ class BinarySearchTree:
 
                 else:
                     pre.right = None
-                    yield current.size
+                    yield current.data
                     current = current.right
 
     def sum_all(self):
         sum = 0
-        for v in self.inorder(tree.root):
+        for v in self.inorder(self.root):
             sum += v
         print(sum)
 
     def preorder(self, troot):
         if troot:
-            print(troot.size,end=' ')
+            print(troot.data,end=' ')
             self.preorder(troot.left)
             self.preorder(troot.right)
 
@@ -130,20 +130,16 @@ class BinarySearchTree:
         if troot:
             self.postorder(troot.left)
             self.postorder(troot.right)
-            print(troot.size, end=' ')
+            print(troot.data, end=' ')
 
-    def addBT(self, troot):
-        if troot is None:
-            return 0
-        return(troot.size + self.addBT(troot.left) + self.addBT(troot.right))
 
 tree = BinarySearchTree()
-tree.insert('f1', 'fsfs', 45)
-tree.insert('f5461', 'nrf', 40)
-tree.insert('eheh', 'hereh', 550)
-tree.insert('eheh', 'thrh', 555)
-tree.insert('efwsf', 'htrhr', 451)
-tree.insert('fsfs', 'nfg', 6)
+tree.insert(45)
+tree.insert(40)
+tree.insert(550)
+tree.insert(555)
+tree.insert(451)
+tree.insert(6)
 
 tree.inorder(tree.root)
 print('')
