@@ -92,11 +92,50 @@ class BinarySearchTree:
             print(temp.size)
             temp = temp.next
 
+# in-order traverse - sort from the smallest to the largest one
     def inorder(self, troot):
+        current = troot
+
+        while current is not None:
+            if current.left is None:
+                yield current.size
+                current = current.right
+            else:
+                pre = current.left
+                while pre.right is not None and pre.right is not current:
+                    pre = pre.right
+
+                if pre.right is None:
+                    pre.right = current
+                    current = current.left
+
+                else:
+                    pre.right = None
+                    yield current.size
+                    current = current.right
+
+    def sum_all(self):
+        sum = 0
+        for v in self.inorder(tree.root):
+            sum += v
+        print(sum)
+
+    def preorder(self, troot):
         if troot:
-            self.inorder(troot.left)
             print(troot.size,end=' ')
-            self.inorder(troot.right)
+            self.preorder(troot.left)
+            self.preorder(troot.right)
+
+    def postorder(self, troot):
+        if troot:
+            self.postorder(troot.left)
+            self.postorder(troot.right)
+            print(troot.size, end=' ')
+
+    def addBT(self, troot):
+        if troot is None:
+            return 0
+        return(troot.size + self.addBT(troot.left) + self.addBT(troot.right))
 
 tree = BinarySearchTree()
 tree.insert('f1', 'fsfs', 45)
@@ -108,4 +147,5 @@ tree.insert('fsfs', 'nfg', 6)
 
 tree.inorder(tree.root)
 print('')
-tree.printlist()
+tree.sum_all()
+print('')
