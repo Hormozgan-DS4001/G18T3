@@ -111,11 +111,6 @@ class BST:
             del_node.data = child
         return deleted
 
-    def inorder(self, node):
-        if node:
-            self.inorder(node.left)
-            print(node.data)
-            self.inorder(node.right)
 
 
 
