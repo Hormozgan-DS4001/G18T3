@@ -1,6 +1,34 @@
 
 
 class BST:
+
+    class NodeHandlerLL:
+        def __init__(self, bst, node):
+            self.bst = bst
+            self.node = node
+
+        def next(self):
+            self.node = self.node.next
+
+        def prev(self):
+            self.node = self.node.prev
+
+        def copy(self):
+            return BST.NodeHandlerLL(self.bst, self.node)
+
+        def traverse_dll(self, reverse=False):
+            while True:
+                if not reverse:
+                    yield self.node.data
+                    if not self.node.next:
+                        break
+                    self.node = self.node.prev
+                else:
+                    yield self.node.data
+                    if not self.node.prev:
+                        break
+                    self.node = self.node.prev
+
     class _Node:
         def __init__(self, data):
             self.left = None
@@ -15,6 +43,9 @@ class BST:
         self.head = None
         self.tail = None
         self.length = 0
+
+    def __len__(self):
+        return self.length
 
     def insert(self, data):
         new_node = self._Node(data)
