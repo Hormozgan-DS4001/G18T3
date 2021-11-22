@@ -65,7 +65,7 @@ class FileManagerPanel(Tk):
             self.result_sort = self.callback_largest
         else:
             self.result_sort = self.callback_smallest
-        self.next_page()
+        self.show_all()
 
     def change_memory(self):
         self.frm_mem.grid(row=2, column=0)
@@ -88,8 +88,8 @@ class FileManagerPanel(Tk):
             Label(self.frm, text=f"Remove File - Name:{node.name} Size:{node.size} Address:{node.address}") \
                 .pack(side="top").after(10000)
 
-    def next_page(self):
-        pass
-
-    def prev_page(self):
-        pass
+    def show_all(self):
+        self.tree.delete(*self.tree.get_children())
+        for i in self.result_sort():
+            item = (i.name, i.address, i.size)
+            self.tree.insert("", "end", value=item)
