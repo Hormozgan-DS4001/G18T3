@@ -1,147 +1,114 @@
-class Node:
-    def __init__(self, data = None,  left=None, right=None, next = None, prev = None):
-        self.data = data
-        self.left = left
-        self.right = right
-        self.next = next
-        self.prev = prev
 
-class BinarySearchTree:
+
+class BD:
+
+    class _Node:
+        def __init__(self, data, key):
+            self.left = None
+            self.right = None
+            self.parent = None
+            self.next = None
+            self.prev = None
+            self.data = data
+            self.key = data
+
     def __init__(self):
         self.root = None
         self.head = None
+        self.tail = None
+        self.length = 0
 
+    def __len__(self):
+        return self.length
 
-    def rsearch(self, troot, key):
-        if troot:
-            if key == troot.data:
-                return True
-            elif key < troot.data:
-                return self.rsearch(troot.left,key)
-            elif key > troot.data:
-                return self.rsearch(troot.right,key)
+    def traverse_bst(self, order: str = "inorder", t: "BD._Node" = Ellipsis):
+        if t is Ellipsis:
+            t = self.root
+        if not t:
+            return
+        if order == "inorder":
+            yield from self.traverse_bst("inorder", t.left)
+            yield t.data
+            yield from self.traverse_bst("inorder", t.right)
+        elif order == "my_order":
+            yield from self.traverse_bst("my_order", t.right)
+            yield t.data
+            yield from self.traverse_bst("my_order", t.left)
+
+    def traverse_dll(self, reverse=False):
+        if not reverse:
+            t = self.head
+            while t:
+                yield t.data
+                t = t.next
         else:
-            return False
+            t = self.tail
+            while t:
+                yield t.data
+                t = t.prev
 
-    def insert(self, s):
-        temp = None
-        troot = self.root
-        while troot:
-            temp = troot
-            if s == troot.data:
-                return
-            elif s < troot.data:
-                troot = troot.left
-            elif s > troot.data:
-                troot = troot.right
-
-        f = Node(s)
-        if self.root:
-            if s < temp.data:
-                temp.left = f
-                temp.prev = f
-            else:
-                temp.right = f
-                temp.next = f
+    def insert(self, data, key):
+        new_node = self._Node(data, key)
+        if self.length == 0:
+            self.head = new_node
+            self.tail = new_node
+            self.root = new_node
         else:
-            self.root = f
-            self.head = f
+            self.tail.next = new_node
+            new_node.prev = self.tail
+            self.tail = new_node
+            self._insert_bst(self.root, new_node)
+        self.length += 1
 
-
-    def delete(self,e):
-        p = self.root
-        pp = None
-        while p and p.data != e:
-            pp = p
-            if e < p.data:
-                p = p.left
-            else:
-                p = p.right
-        if not p:
-            return False
-        if p.left and p.right:
-            s = p.left
-            ps = p
-            while s.right:
-                ps = s
-                s = s.right
-            p.data = s.data
-            p = s
-            pp = ps
-        c = None
-        if p.left:
-            c = p.left
+    def _insert_bst(self, root, node):
+        if root is None:
+            return node
+        if root.key < node.key:
+            r_child = self._insert_bst(root.right, node)
+            root.right = r_child
+            r_child.parent = root
         else:
-            c = p.right
-        if p == self.root:
+            l_child = self._insert_bst(root.left, node)
+            root.left = l_child
+            l_child.parent = root
+        return root
+
+    @staticmethod
+    def successor(node):
+        t = node
+        p = None
+        while t.left:
+            p = t
+            t = t.left
+        return t, p
+
+    def delete(self):
+        del_node = self.head
+        deleted = self.head.data
+        self.length -= 1
+        if self.length == 0:
+            self.tail = None
+            self.head = None
             self.root = None
+            return
         else:
-            if p == pp.left:
-                pp.left = c
+            self.head = self.head.next
+            self.head.prev = None
+        if del_node.left is None and del_node.right is None:
+            if del_node.key > del_node.parent.key:
+                del_node.parent.right = None
             else:
-                pp.right = c
-
-#naghes
-    def printlist(self):
-
-        temp = self.head
-        while temp.left:
-            temp = temp.left
-
-        while temp.next is None:
-            print(temp.data)
-            temp = temp.next
-
-# in-order traverse - sort from the smallest to the largest one
-    def inorder(self, troot):
-        current = troot
-
-        while current is not None:
-            if current.left is None:
-                yield current.data
-                current = current.right
+                del_node.parent.left = None
+        elif del_node.left and del_node.right:
+            suc, pare = self.successor(del_node.right)
+            if pare:
+                pare.left = suc.right
             else:
-                pre = current.left
-                while pre.right is not None and pre.right is not current:
-                    pre = pre.right
-
-                if pre.right is None:
-                    pre.right = current
-                    current = current.left
-
-                else:
-                    pre.right = None
-                    yield current.data
-                    current = current.right
-
-    def sum_all(self):
-        sum = 0
-        for v in self.inorder(self.root):
-            sum += v
-        print(sum)
-
-    def preorder(self, troot):
-        if troot:
-            print(troot.data,end=' ')
-            self.preorder(troot.left)
-            self.preorder(troot.right)
-
-    def postorder(self, troot):
-        if troot:
-            self.postorder(troot.left)
-            self.postorder(troot.right)
-            print(troot.data, end=' ')
+                del_node.right = suc.right
+            del_node.data = suc.data
+        else:
+            child = del_node.left if del_node.left else del_node.right
+            del_node.data = child
+        return deleted
 
 
-tree = BinarySearchTree()
-tree.insert(45)
-tree.insert(40)
-tree.insert(550)
-tree.insert(555)
-tree.insert(451)
-tree.insert(6)
-
-tree.inorder(tree.root)
-print('')
-tree.sum_all()
-print('')
