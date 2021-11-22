@@ -1,2 +1,2 @@
-from model.data_structure import BST
+from model.data_structure import BD
 from model.model import Core
