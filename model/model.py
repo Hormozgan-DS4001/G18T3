@@ -1,4 +1,4 @@
-from data_structure import BST
+from data_structure import BD
 
 
 class File:
@@ -12,7 +12,7 @@ class Core:
     def __init__(self):
         self.memory = 0
         self.size_files = 0
-        self.file_list = BST()
+        self.file_list = BD()
 
     def add_file(self, name: str, address: str, size: int):
         pass

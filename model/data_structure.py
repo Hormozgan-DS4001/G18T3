@@ -1,42 +1,16 @@
 
 
-class BST:
-
-    class NodeHandlerLL:
-        def __init__(self, bst, node):
-            self.bst = bst
-            self.node = node
-
-        def next(self):
-            self.node = self.node.next
-
-        def prev(self):
-            self.node = self.node.prev
-
-        def copy(self):
-            return BST.NodeHandlerLL(self.bst, self.node)
-
-        def traverse_dll(self, reverse=False):
-            while True:
-                if not reverse:
-                    yield self.node.data
-                    if not self.node.next:
-                        break
-                    self.node = self.node.prev
-                else:
-                    yield self.node.data
-                    if not self.node.prev:
-                        break
-                    self.node = self.node.prev
+class BD:
 
     class _Node:
-        def __init__(self, data):
+        def __init__(self, data, key):
             self.left = None
             self.right = None
             self.parent = None
             self.next = None
             self.prev = None
             self.data = data
+            self.key = data
 
     def __init__(self):
         self.root = None
@@ -47,8 +21,22 @@ class BST:
     def __len__(self):
         return self.length
 
-    def insert(self, data):
-        new_node = self._Node(data)
+    def traverse(self, order: str = "inorder", t: "BD._Node" = Ellipsis):
+        if t is Ellipsis:
+            t = self.root
+        if not t:
+            return
+        if order == "inorder":
+            yield from self.traverse("inorder", t.left)
+            yield t.data
+            yield from self.traverse("inorder", t.right)
+        elif order == "my_order":
+            yield from self.traverse("my_order", t.right)
+            yield t.data
+            yield from self.traverse("my_order", t.left)
+
+    def insert(self, data, key):
+        new_node = self._Node(data, key)
         if self.length == 0:
             self.head = new_node
             self.tail = new_node
@@ -63,7 +51,7 @@ class BST:
     def _insert_bst(self, root, node):
         if root is None:
             return node
-        if root.data < node.data:
+        if root.key < node.key:
             r_child = self._insert_bst(root.right, node)
             root.right = r_child
             r_child.parent = root
@@ -95,7 +83,7 @@ class BST:
             self.head = self.head.next
             self.head.prev = None
         if del_node.left is None and del_node.right is None:
-            if del_node.data > del_node.parent.data:
+            if del_node.key > del_node.parent.key:
                 del_node.parent.right = None
             else:
                 del_node.parent.left = None
