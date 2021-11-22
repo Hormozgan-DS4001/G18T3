@@ -21,19 +21,31 @@ class BD:
     def __len__(self):
         return self.length
 
-    def traverse(self, order: str = "inorder", t: "BD._Node" = Ellipsis):
+    def traverse_bst(self, order: str = "inorder", t: "BD._Node" = Ellipsis):
         if t is Ellipsis:
             t = self.root
         if not t:
             return
         if order == "inorder":
-            yield from self.traverse("inorder", t.left)
+            yield from self.traverse_bst("inorder", t.left)
             yield t.data
-            yield from self.traverse("inorder", t.right)
+            yield from self.traverse_bst("inorder", t.right)
         elif order == "my_order":
-            yield from self.traverse("my_order", t.right)
+            yield from self.traverse_bst("my_order", t.right)
             yield t.data
-            yield from self.traverse("my_order", t.left)
+            yield from self.traverse_bst("my_order", t.left)
+
+    def traverse_dll(self, reverse=False):
+        if not reverse:
+            t = self.head
+            while t:
+                yield t.data
+                t = t.next
+        else:
+            t = self.tail
+            while t:
+                yield t.data
+                t = t.prev
 
     def insert(self, data, key):
         new_node = self._Node(data, key)
