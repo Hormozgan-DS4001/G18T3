@@ -1,8 +1,8 @@
-from ds import BinarySearchTree
-BST = BinarySearchTree()
+from data_structure import BD
+
 
 class File:
-    def __init__(self, name: str, address: str, size: float):
+    def __init__(self, name: str, address: str, size: int):
         self.name = name
         self.address = address
         self.size = size
@@ -10,24 +10,22 @@ class File:
 
 class Core:
     def __init__(self):
-        self.BST = BinarySearchTree()
         self.memory = 0
+        self.size_files = 0
+        self.file_list = BD()
 
-    def add_file(self, n, add, s):
-        temp = File(n,add, s)
-        self.BST.insert(temp)
-        change_memory(s)
-
-    def show_files(self):
-        self.BST.sum_all()
+    def add_file(self, name: str, address: str, size: int):
+        pass
 
     def delete_file(self):
-        pass
+        while self.size_files >= self.memory:
+            deleted = self.file_list.delete()
+            yield deleted
+            self.size_files -= deleted.size
 
-    def change_memory(self):
-        pass
+    def change_memory(self, size: int):
+        self.memory = size
 
 
-tree = Core()
-tree.add_file('samin', 'D:', 256)
-tree.show_files()
+
+
