@@ -57,21 +57,27 @@ class BD:
             self.tail.next = new_node
             new_node.prev = self.tail
             self.tail = new_node
-            self._insert_bst(self.root, new_node)
+            self._insert_bst(new_node, key)
         self.length += 1
 
-    def _insert_bst(self, root, node):
-        if root is None:
-            return node
-        if root.key < node.key:
-            r_child = self._insert_bst(root.right, node)
-            root.right = r_child
-            r_child.parent = root
-        else:
-            l_child = self._insert_bst(root.left, node)
-            root.left = l_child
-            l_child.parent = root
-        return root
+    def _insert_bst(self, node, key):
+        t = self.root
+        if not t:
+            self.root = node
+            return
+        while True:
+            if t.key > key:
+                if t.left:
+                    t = t.left
+                else:
+                    t.left = node
+                    break
+            if t.key < key:
+                if t.right:
+                    t = t.right
+                else:
+                    t.right = node
+                    break
 
     @staticmethod
     def successor(node):
@@ -90,7 +96,7 @@ class BD:
             self.tail = None
             self.head = None
             self.root = None
-            return
+            return deleted
         else:
             self.head = self.head.next
             self.head.prev = None
