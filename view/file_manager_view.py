@@ -45,8 +45,8 @@ class FileManagerPanel(Tk):
         self.option_var = tkinter.StringVar()
         self.option_var.set("Newest to Oldest")
         tkinter.OptionMenu(frm_tree, self.option_var, ["Newest to Oldest", "Oldest to Newest", "Largest to Smallest",
-                                                  "Smallest to Largest"], command=self.result_om).grid(row=1, column=0,
-                                                                                                       sticky="w")
+                                                       "Smallest to Largest"],
+                           command=self.result_om).grid(row=1, column=0, sticky="w")
 
         self.tree = ttk.Treeview(frm_tree, show="headings", selectmode="brows", height=10)
         self.tree["columns"] = ("name", "address", "size")
