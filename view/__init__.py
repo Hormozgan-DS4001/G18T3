@@ -1,0 +1,1 @@
+from view.file_manager_view import FileManagerPanel
