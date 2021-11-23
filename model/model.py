@@ -26,6 +26,9 @@ class Core:
     def change_memory(self, size: int):
         self.memory = size
 
+    def send_memory(self):
+        return self.size_files, self.memory
+
 
 
 
