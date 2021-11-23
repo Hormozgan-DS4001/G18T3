@@ -15,7 +15,9 @@ class Core:
         self.file_list = BD()
 
     def add_file(self, name: str, address: str, size: int):
-        pass
+        temp = File(name, address, size)
+        self.file_list.insert(temp, size)
+        self.size_files += temp.size
 
     def delete_file(self):
         while self.size_files >= self.memory:
