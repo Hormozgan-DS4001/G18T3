@@ -18,7 +18,6 @@ class Core:
         temp = File(name, address, size)
         self.file_list.insert(temp, size)
         self.size_files += temp.size
-        self.delete_file()
 
     def delete_file(self):
         while self.size_files >= self.memory:
@@ -28,24 +27,23 @@ class Core:
 
     def change_memory(self, size: int):
         self.memory = size
-        self.delete_file()
-
-    def show_files(self):
-        self.file_list.traverse_bst('inorder')
 
     def send_memory(self):
         return self.size_files, self.memory
 
     def show_small_to_large(self):
-        return self.file_list.traverse_bst('inorder')
+        return self.file_list.traverse_bst
 
     def show_large_to_small(self):
-        return self.file_list.traverse_bst('myorder')
+        return self.file_list.traverse_bst
 
     def order_by_oldest(self):
-        return self.file_list.traverse_dll(False)
+        return self.file_list.traverse_dll
 
     def order_by_newest(self):
-        return self.file_list.traverse_dll(True)
+        return self.file_list.traverse_dll
+
+    def send_memory(self):
+        return self.size_files, self.memory
 
 
