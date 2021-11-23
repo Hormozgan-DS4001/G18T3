@@ -6,7 +6,7 @@ import tkinter
 
 class FileManagerPanel(Tk):
     def __init__(self, callback_new, callback_old, callback_largest, callback_smallest, callback_memory,
-                 callback_delete, callback_upload):
+                 callback_delete, callback_upload, callback_get_memory):
         super(FileManagerPanel, self).__init__()
         self.callback_new = callback_new
         self.callback_old = callback_old
@@ -15,6 +15,9 @@ class FileManagerPanel(Tk):
         self.callback_memory = callback_memory
         self.callback_delete = callback_delete
         self.callback_upload = callback_upload
+        self.callback_get_mem = callback_get_memory
+
+        self.size_mem, self.full_mem = self.callback_get_mem()
 
         frm_console = Frame(self)
         frm_console.grid(row=0, column=0)
@@ -54,6 +57,7 @@ class FileManagerPanel(Tk):
         self.tree.heading("address", text="Address")
         self.tree.heading("size", text="Size")
         self.tree.grid(row=1, column=0)
+        Label(self, text=f"{self.full_mem} GB of {self.size_mem} GB Used")
 
     def result_om(self):
         res = self.option_var.get()
@@ -72,11 +76,12 @@ class FileManagerPanel(Tk):
 
     def update_memory(self):
         strong = self.scale.get()
-        self.callback_memory(int(strong))
+        self.callback_memory(strong)
         for node in self.callback_delete():
             Label(self.frm, text=f"Remove File - Name:{node.name} Size:{node.size} Address:{node.address}") \
                 .pack(side="top").after(10000)
         self.frm_mem.grid_forget()
+        self.update_label()
 
     def add_file(self):
         name = AddFile(self, "File Name: ", "Upload File").get_result()
@@ -87,9 +92,13 @@ class FileManagerPanel(Tk):
         for node in self.callback_delete():
             Label(self.frm, text=f"Remove File - Name:{node.name} Size:{node.size} Address:{node.address}") \
                 .pack(side="top").after(10000)
+        self.update_label()
 
     def show_all(self):
         self.tree.delete(*self.tree.get_children())
         for i in self.result_sort():
             item = (i.name, i.address, i.size)
             self.tree.insert("", "end", value=item)
+
+    def update_label(self):
+        self.size_mem, self.full_mem = self.callback_get_mem()
