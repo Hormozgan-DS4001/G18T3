@@ -18,6 +18,7 @@ class Core:
         temp = File(name, address, size)
         self.file_list.insert(temp, size)
         self.size_files += temp.size
+        self.delete_file()
 
     def delete_file(self):
         while self.size_files >= self.memory:
@@ -27,21 +28,19 @@ class Core:
 
     def change_memory(self, size: int):
         self.memory = size
+        self.delete_file()
 
     def show_files(self):
-        self.file_list.traverse_bst()
+        self.file_list.traverse_bst('inorder')
 
     def send_memory(self):
         return self.size_files, self.memory
 
     def show_small_to_large(self):
-        self.file_list.traverse_bst()
+        self.file_list.traverse_bst('inorder')
 
     def show_large_to_small(self):
-        a = []
-        a.append(self.file_list.traverse_bst())
-        for i in a[::-1]:
-            yield a[i-1]
+        self.file_list.traverse_bst('myorder')
 
     def order_by_oldest(self):
         self.file_list.traverse_dll()
@@ -51,3 +50,10 @@ class Core:
         a.append(self.file_list.traverse_dll())
         for i in a[::-1]:
             yield a[i - 1]
+
+
+""" tree = Core()
+    tree.add_file('samin', 'D:', 256)
+    tree.add_file('samin', 'D:', 5464)
+    tree.add_file('samin', 'D:', 8797)
+    print(tree.show_small_to_large()) """
