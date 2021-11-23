@@ -28,6 +28,23 @@ class Core:
     def change_memory(self, size: int):
         self.memory = size
 
+    def show_files(self):
+        self.file_list.traverse_bst()
 
+    def show_small_to_large(self):
+        self.file_list.traverse_bst()
 
+    def show_large_to_small(self):
+        a = []
+        a.append(self.file_list.traverse_bst())
+        for i in a[::-1]:
+            yield a[i-1]
 
+    def order_by_oldest(self):
+        self.file_list.traverse_dll()
+
+    def order_by_newest(self):
+        a = []
+        a.append(self.file_list.traverse_dll())
+        for i in a[::-1]:
+            yield a[i - 1]
