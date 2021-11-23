@@ -10,7 +10,7 @@ class BD:
             self.next = None
             self.prev = None
             self.data = data
-            self.key = data
+            self.key = key
 
     def __init__(self):
         self.root = None
