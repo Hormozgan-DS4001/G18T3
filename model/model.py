@@ -31,6 +31,9 @@ class Core:
     def show_files(self):
         self.file_list.traverse_bst()
 
+    def send_memory(self):
+        return self.size_files, self.memory
+
     def show_small_to_large(self):
         self.file_list.traverse_bst()
 
