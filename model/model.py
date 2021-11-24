@@ -1,4 +1,4 @@
-from data_structure import BD
+from model import BD
 
 
 class File:
@@ -20,10 +20,13 @@ class Core:
         self.size_files += temp.size
 
     def delete_file(self):
-        while self.size_files >= self.memory:
-            deleted = self.file_list.delete()
-            yield deleted
-            self.size_files -= deleted.size
+        if self.size_files > self.memory:
+            while self.size_files >= self.memory:
+                deleted = self.file_list.delete()
+                yield deleted
+                self.size_files -= deleted.size
+        else:
+            return
 
     def change_memory(self, size: int):
         self.memory = size
@@ -32,18 +35,18 @@ class Core:
         return self.size_files, self.memory
 
     def show_small_to_large(self):
-        return self.file_list.traverse_bst
+        return self.file_list.traverse_bst()
 
     def show_large_to_small(self):
-        return self.file_list.traverse_bst
+        return self.file_list.traverse_bst("my_order")
 
     def order_by_oldest(self):
-        return self.file_list.traverse_dll
+        return self.file_list.traverse_dll()
 
     def order_by_newest(self):
-        return self.file_list.traverse_dll
+        return self.file_list.traverse_dll(True)
 
-    def send_memory(self):
+    def send_memory1(self):
         return self.size_files, self.memory
 
 
