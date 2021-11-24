@@ -1,4 +1,4 @@
-from configure import Frame, Button, LabelFrame, Label, Tk, Entry, Scale
+from configure import Frame, Button, Label, Tk, Scale
 from add_file_view import AddFile
 from tkinter import ttk
 import tkinter
@@ -45,8 +45,8 @@ class FileManagerPanel(Tk):
         self.result_sort = self.callback_new
         self.option_var = tkinter.StringVar()
         self.option_var.set("Newest to Oldest")
-        tkinter.OptionMenu(frm_tree, self.option_var, ["Newest to Oldest", "Oldest to Newest", "Largest to Smallest",
-                                                       "Smallest to Largest"],
+        value = ["Newest to Oldest", "Oldest to Newest", "Largest to Smallest", "Smallest to Largest"]
+        tkinter.OptionMenu(frm_tree, self.option_var, *value,
                            command=self.result_om).grid(row=1, column=0, sticky="w")
 
         self.tree = ttk.Treeview(frm_tree, show="headings", selectmode="brows", height=10)
@@ -54,10 +54,11 @@ class FileManagerPanel(Tk):
         self.tree.heading("name", text="Name")
         self.tree.heading("address", text="Address")
         self.tree.heading("size", text="Size")
-        self.tree.grid(row=1, column=0)
-        Label(self, text=f"{self.full_mem} GB of {self.size_mem} GB Used")
+        self.tree.grid(row=2, column=0)
+        Label(self, text=f"{self.full_mem} GB of {self.size_mem} GB Used").grid(row=4, column=0)
+        self.show_all()
 
-    def result_om(self):
+    def result_om(self, even):
         res = self.option_var.get()
         if res == "Newest to Oldest":
             self.result_sort = self.callback_new
@@ -75,9 +76,7 @@ class FileManagerPanel(Tk):
     def update_memory(self):
         strong = self.scale.get()
         self.callback_memory(strong)
-        for node in self.callback_delete():
-            Label(self.frm, text=f"Remove File - Name:{node.name} Size:{node.size} Address:{node.address}") \
-                .pack(side="top").after(10000)
+        self.delete_file()
         self.frm_mem.grid_forget()
         self.update_label()
 
@@ -85,11 +84,12 @@ class FileManagerPanel(Tk):
         name = AddFile(self, "File Name: ", "Upload File").get_result()
         address = AddFile(self, "File Address: ", "Upload File").get_result()
         size = AddFile(self, "File Size: ", "Upload File").get_result()
-        self.callback_upload(name, address, size)
-        Label(self.frm, text=f"Upload File - Name:{name} Size:{size} Address:{address}").pack(side="top").after(10000)
-        for node in self.callback_delete():
-            Label(self.frm, text=f"Remove File - Name:{node.name} Size:{node.size} Address:{node.address}") \
-                .pack(side="top").after(10000)
+        self.callback_upload(name, address, int(size))
+        l1 = Label(self.frm, text=f"Upload File - Name:{name} Size:{size} Address:{address}")
+        l1.pack(side="top")
+        l1.after(10000, self.disappear)
+        self.show_all()
+        self.delete_file()
         self.update_label()
 
     def show_all(self):
@@ -100,3 +100,16 @@ class FileManagerPanel(Tk):
 
     def update_label(self):
         self.size_mem, self.full_mem = self.callback_get_mem()
+        Label(self, text=f"{self.full_mem} GB of {self.size_mem} GB Used").grid(row=4, column=0)
+
+    def delete_file(self):
+        if not self.callback_delete():
+            return
+        for node in self.callback_delete():
+            l1 = Label(self.frm, text=f"Remove File - Name:{node.name} Size:{node.size} Address:{node.address}")
+            l1.after(10000, self.disappear)
+            l1.pack(side="top")
+
+    def disappear(self):
+        for chile in self.frm.winfo_children():
+            chile.destroy()

@@ -12,7 +12,7 @@ class AddFile(TopLevel):
         if size:
             self.ent.grid_forget()
             self.ent = Scale(self, width=18, length=122, from_=1, to=2048, orient="horizontal")
-        Button(self, text="OK", command=self.okay)
+        Button(self, text="OK", command=self.okay).grid(row=1, column=0)
         self.result = None
 
     def okay(self):
