@@ -111,7 +111,7 @@ class BD:
                 pare.left = suc.right
             else:
                 del_node.right = suc.right
-            del_node.data = suc.data
+            del_node.data, del_node.key = suc.data, suc.key
         else:
             child = del_node.left if del_node.left else del_node.right
             del_node.data = child
